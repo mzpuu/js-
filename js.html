@@ -1,0 +1,1087 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+<title>js原生</title>
+<meta name="description" content="">
+<meta name="keywords" content="">
+<link href="css/style.css" rel="stylesheet">
+</head>
+<body>
+    <div id="content">
+    	<div>
+    		<h3>原生方法</h3>
+    		<p>查找获得元素</p>
+    		<pre class="syntax brush-javascript">
+with(document|parentNode){
+	querySelector('CSS选择器');//元素/null
+	querySelectorAll('CSS选择器');//元素数组
+
+	getElementById('ID');//元素/null
+	getElementsByClassName('类名');//元素数组
+	getElementsByName('name属性');//元素数组
+	getElementsByTagName('标签名');//元素数组
+}  			
+
+// 返回当前文档中第一个类名为 "myclass" 的元素
+var el = document.querySelector(".myclass");
+
+// 返回一个文档中所有的class为"note"或者 "alert"的div元素
+var els = document.querySelectorAll("div.note, div.alert");
+
+// 获取元素
+var el = document.getElementById('xxx');
+var els = document.getElementsByClassName('highlight');
+var els = document.getElementsByTagName('td');
+
+// 获取父元素、父节点
+var parent = ele.parentElement;
+var parent = ele.parentNode;
+
+// 获取子节点，子节点可以是任何一种节点，可以通过nodeType来判断
+var nodes = ele.children;    
+
+// 查询子元素
+var els = ele.getElementsByTagName('td');
+var els = ele.getElementsByClassName('highlight');
+
+// 当前元素的第一个/最后一个子元素节点
+var el = ele.firstElementChild;
+var el = ele.lastElementChild;
+
+// 下一个/上一个兄弟元素节点
+var el = ele.nextElementSibling;
+var el = ele.previousElementSibling;
+    		</pre>
+    		<p>创建元素</p>
+    		<pre class="syntax brush-javascript">
+document.createElement('标签名');//元素
+document.createTextNode('文本内容');//元素
+existingElement.cloneNode(true/false);//克隆元素,参数:是否连同子元素一起复制  
+
+var el1 = document.createElement('div');
+var el2 = document.createElement('input');
+var node = document.createTextNode('hello world!');  		    				
+    		</pre>
+    		<p>元素增减</p>
+    		<pre class="syntax brush-javascript">
+with(parentElement){
+	appendChild(childElement);//在末尾插入元素
+	removeChild(childElement);//删除子元素
+	replaceChild(newElement, oldElement);//替换元素
+	insertBefore(newElement, existingItem);//在某个元素之前添加新元素
+}    	
+
+// 添加、删除子元素
+ele.appendChild(el);
+ele.removeChild(el);
+
+// 替换子元素
+ele.replaceChild(el1, el2);
+
+// 插入子元素
+parentElement.insertBefore(newElement, referenceElement);		
+    		</pre>
+    		<p>元素HTML属性</p>
+    		<pre class="syntax brush-javascript">
+with(Element){
+	getAttribute(key);
+	setAttribute(key, value);
+	hasAttribute(key);
+}    
+
+// 获取一个{name, value}的数组
+var attrs = el.attributes;
+
+// 获取、设置属性
+var c = el.getAttribute('class');
+el.setAttribute('class', 'highlight');
+
+// 判断、移除属性
+el.hasAttribute('class');
+el.removeAttribute('class');
+
+// 是否有属性设置
+el.hasAttributes();     			
+    		</pre>
+    		<p>元素关系内容字段</p>
+    		<pre class="syntax brush-javascript">
+with(Element){
+	innerHTML;
+	innerText,textContent;//前者除了FF都支持,后者除了IE都支持
+	id,style,className,value;
+	scrollTop;//滚动条距离顶部高度(一般测量body.scrollTop)
+	offsetTop;//相对于文档顶部的高度(全部内容,从body一开始计算)
+	//--关系--
+	parentNode;//父节点(parentElement)
+	previousElementSibling;//上一个DOM元素(previousSibling)
+	nextElementSibling;//下一个DOM元素(nextSibling)
+	children;//子DOM元素的数组(childNodes:所有元素,包括文本和注释)
+	firstElementChild;//首个子DOM元素(firstChild)
+	lastElementChild;//最后一个DOM元素(lastChild)
+}
+    		</pre>
+    	</div>
+    	<div>
+    		<h3>JS内置对象属性和方法汇总</h3>
+    		<p>toString()    功能：返回当前对象的字符串形式，返回值为String类型。</p>
+    		<pre class="syntax brush-javascript">
+[1,'2',true].toString(); //"1,2,true"
+(new Date()).toString(); //"Sun Sep 24 2017 14:52:20 GMT+0800 (CST)"
+({name:'ryan'}).toString(); //"[object Object]"
+
+var num = 10;
+console.log(num.toString(2)); //1010
+    		</pre>
+    		<p>toLocaleString()    功能：返回当前对象的"本地化"字符串形式，以便于当前环境的用户辨识和使用，返回值为String类型。</p>
+    		<pre class="syntax brush-javascript">
+(1234567).toLocaleString(); //"1,234,567"
+(6.37588).toLocaleString(); //"6.376"
+(new Date()).toLocaleString(); //"2017/9/24 下午2:58:21"
+    		</pre>
+    		<p>valueOf()    功能：返回指定对象的原始值。</p>
+    		<p>JavaScript的许多内置对象都重写了该函数，以实现更适合自身的功能需要。因此，不同类型对象的valueOf()方法的返回值和返回值类型均可能不同。</p>
+    		<br>
+    		<p>Object.assign(target, ...sources)    功能：把一个或多个源对象的可枚举、自有属性值复制到目标对象中，返回值为目标对象。</p>
+    		<pre class="syntax brush-javascript">
+var target = {
+    a:1
+};
+var source1 = {
+    b:2
+};
+var source2 = {
+    c:function(){
+      console.log('c');
+    }
+};
+Object.assign(target,source1,source2);
+console.log(target); //{a: 1, b: 2, c: ƒ}    			
+    		</pre>
+			<pre class="syntax brush-javascript">
+//自定义一个assign方法
+  function copy(target){
+    if(target == null){
+      throwError('出错：Cannot convert undefined or null to object');
+    }
+    var target = new Object(target);
+    for(var i = 1;i < arguments.length;i ++){
+      var source = arguments[i];
+      for(var key in source){
+        if(source.hasOwnProperty(key)){
+          //若当前属性为源对象自有属性，则拷贝至目标对象
+          target[key] = source[key];
+        }
+      }
+    }
+    return target;
+  }
+			</pre>	
+			<p>charAt()    功能：返回指定位置的字符。若参数 index 不在 0 与 string.length 之间，该方法将返回一个空字符串。</p>
+			<p>indexOf()    功能：检索字符串，返回指定子字符串在字符串中首次出现的位置。</p>
+			<p>replace()    功能：在字符串中用一些字符替换另一些字符，或替换一个与正则表达式匹配的子串。</p>
+			<pre class="syntax brush-javascript">
+var s = 'hello world hello';
+console.log(s.replace('hello','hi')); //hi world hello
+console.log(s.replace(/hello/,'hi')); //hi world hello
+console.log(s.replace(/hello/g,'hi')); //hi world hi
+			</pre>
+			<p>toLowerCase() & toUpperCase()    功能：把字符串转换为小写/大写。</p>
+			<pre class="syntax brush-javascript">
+var s = 'Hello World';
+console.log(s.toLowerCase()); //hello world
+console.log(s.toUpperCase()); //HELLO WORLD				
+			</pre>
+			<p>split()    功能：用于把一个字符串分割成字符串数组，是 Array.join( ) 的逆操作。</p>
+			<pre class="syntax brush-javascript">
+var s = 'hi baby';
+console.log(s.split('')); //[ 'h', 'i', ' ', 'b', 'a', 'b', 'y' ]
+console.log(s.split(' '));  //[ 'hi', 'baby' ]
+console.log(s.split('b')); //[ 'hi ', 'a', 'y' ]				
+			</pre>
+			<p>slice()    功能：截取字符串的某个部分，并以新的字符串返回被提取的部分。</p>
+			<pre class="syntax brush-javascript">
+var s = 'hi baby';
+console.log(s.slice(3)); //baby
+console.log(s.slice(1,5)); //i ba
+console.log(s.slice(-4)); //baby
+console.log(s.slice(-4,-2)); //ba				
+			</pre>
+			<p>substr()    功能：截取从指定下标开始的指定数目的字符。参数1：start，必须，截取的起始位置，接受负值。
+参数2：length，可选，截取字符串的长度，若未指定，则默认截取到原字符串的末尾。
+返回值：截取部分，一个新的字符串。</p>
+			<pre class="syntax brush-javascript">
+var s = 'hi baby';
+console.log(s.substr(3)); //baby
+console.log(s.substr(3,2)); //ba
+console.log(s.substr(-3,2)); //ab			
+			</pre>
+			<p>substring()    功能：截取字符串中介于两个指定下标之间的字符。参数1：start，必须，截取的起始位置。
+参数2：end，可选，截取的结束位置，若未指定，则默认截取到原字符串的末尾。
+返回值：截取部分，一个新的字符串。</p>
+			<pre class="syntax brush-javascript">
+var s = 'hi baby';
+console.log(s.substring(3)); //baby
+console.log(s.substring(3,5)); //ba
+console.log(s.substring(5,3)); //ba
+console.log(s.substring(3,3)); //''		
+			</pre>
+			<p>parseInt(string,radix)	功能：解析一个字符串，并返回一个整数。</p>
+			<pre class="syntax brush-javascript">
+console.log(parseInt('10')); //10
+console.log(parseInt('11',9)); //10 (9+1)
+console.log(parseInt('11',2)); //3 (2+1)
+console.log(parseInt('17',8)); //15 (8+7)
+console.log(parseInt('1f',16)); //31 (16+15)
+console.log(parseInt('010')); //10
+console.log(parseInt('0x0011')); //17			
+			</pre>
+			<p>parseFloat()    功能：解析一个字符串，并返回一个浮点数。</p>
+			<pre class="syntax brush-javascript">
+console.log(parseFloat('10')); //10
+console.log(parseFloat('10.00')); //10 
+console.log(parseFloat('10.33')); //10.33
+console.log(parseFloat(' 60 ')); //60 首尾的空格会忽略
+console.log(parseFloat('23 34 45')); //23 中间的空格不会忽略，会中断
+console.log(parseFloat('23 years')); //23
+console.log(parseFloat('i am 23')); //NaN				
+			</pre>
+			<p>isNaN(number)    功能：用于检查其参数是否为非数字值。</p>
+			<pre class="syntax brush-javascript">
+console.log(isNaN(123)); //false
+console.log(isNaN(-1.23)); //false
+console.log(isNaN(5-2)); //false
+console.log(isNaN(0)); //false
+console.log(isNaN(0/0)); //true
+console.log(isNaN('Hello')); //true
+			</pre>
+			<p>Number(object)    功能：把对象的值转换为数字。</p>
+			<pre class="syntax brush-javascript">
+console.log(Number(new Boolean(true))); //1
+console.log(Number(new Boolean(false))); //0
+console.log(Number(new Date())); //1506266494726
+console.log(Number(new String('999'))); //999
+console.log(Number(new String('999 888'))); //NaN				
+			</pre>
+			<p>String(object)    功能：把对象的值转换为字符串。</p>
+			<pre class="syntax brush-javascript">
+console.log(String(new Boolean(true))); //'true'
+console.log(String(new Boolean(false))); //'false'
+console.log(String(new Date())); //'Sun Sep 24 2017 23:25:43 GMT+0800 (CST)'
+console.log(String(new String('999'))); //'999'
+console.log(String(new String('999 888'))); //'999 888'
+console.log(String(12345)); //'12345'			
+			</pre>
+			<p>typeof运算符</p>
+			<pre class="syntax brush-javascript">
+var a = '123'
+console.log(typeof(a)) //string
+var b = []
+console.log(typeof(b)) //object
+var c = {}
+console.log(typeof(c)) //object
+var d = null
+console.log(typeof(d)) //object				
+			</pre>
+    	</div>
+    	<div>
+    		<h3>Math对象</h3>
+    		<pre class="syntax brush-javascript">
+Math.abs(); //取绝对值
+Math.ceil(); //向上取整
+Math.floor(); //向下取整
+Math.round(); //四舍五入取整
+Math.random(); //生成0~1间的随机数(>0)
+Math.max(x,y); //取x、y中较大的那个
+Math.min(x,y); //取x、y中较小的那个    			
+    		</pre>
+    	</div>
+    	<div>
+    		<h3>JSON对象</h3>
+    		<p>新版的浏览器里JSON对象已经被原生的内置对象了，目前有2个静态方法：JSON.parse用来将JSON字符串反序列化成对象，JSON.stringify用来将对象序列化成JSON字符串。</p>
+    		<pre class="syntax brush-javascript">
+var jsonString = '{"name":"ryan"}'; //JSON字符串（比如从AJAX获取字符串信息）
+var obj = JSON.parse(jsonString); //将字符串反序列化成对象
+console.log(obj); //{ name: 'ryan' }
+console.log(obj.name == 'ryan'); //true    		
+    		</pre>
+    		<p>JSON.stringify()    功能：将一个对象解析为JSON字符串</p>
+    		<pre class="syntax brush-javascript">
+var obj = {name:'ryan',age:23};
+var jsonString = JSON.stringify(obj);
+console.log(jsonString); //'{"name":"ryan","age":23}'    			
+    		</pre>
+    	</div>
+    	<div>
+    		<h3>去除两端空格</h3>
+    		<pre class="syntax brush-javascript">
+String.prototype.trim = function() {  
+    var reExtraSpace = /^\s*(.*?)\s+$/;  
+    return this.replace(reExtraSpace, “$1″)  
+}  
+var str=' aaa ';
+str.trim() //'aaa'
+    		</pre>
+    	</div>
+    	<div>
+	    	<h3>正则表达式每3个数字用逗号间隔</h3>
+	    	<pre class="syntax brush-javascript">
+var str = '1234567890';
+str = str.replace(/(\d{1,3})(?=(?:\d{3})+(?!\d))/g,'$1,');
+console.log(str)  //1,234,567,890
+</pre>
+	    	<h3>requestAnimFrame判断</h3>
+	    	<p>浏览器支持requestAnimFrame则使用requestAnimFrame否则使用setTimeout</p>
+	    	<pre class="syntax brush-javascript">
+window.requestAnimFrame = (function() {
+	return window.requestAnimationFrame || window.webkitRequestAnimationFrame || window.mozRequestAnimationFrame ||
+	function(callback) {
+		window.setTimeout(callback, 1000 / 60);
+	};
+})();
+</pre>
+		</div>
+		<div>
+			<h3>分割字符串</h3>
+			<pre class="syntax brush-javascript">
+var _link = window.location.href;
+function getUrlVars(param){
+	var str = window.location.search.substr(1);
+	var _arr = str.split('?');  //_arr=["v=2333"]
+	var _params = {};
+	for(var i=0;i<_arr.length;i++){
+		if(!!_arr[i]){
+			var __arr = _arr[i].split('=');
+			_params[__arr[0]] = __arr[1];
+		}
+	}
+	return _params[param];
+}
+var resouce=getUrlVars("v");  
+console.log(resouce)   // js.html?v=2333   返回的resouce=2333
+</pre>
+		</div>
+		<div>
+			<h3>数组去重</h3>
+<pre class="syntax brush-javascript highlight">
+/*
+*根据下标
+*ndexOf() 返回某个指定字符串值在字符串中首次出现的位置 如果没有就返回 -1
+*newarr这个数组 里面找下是否存在arr数组重复的项 没有就push
+*/	
+var arr = ['f', '0', '3', 'f', 'd', '2', 'd', 'd']
+  var newarr = [] //定义一个新的数组
+  for (var i= 0; i< arr.length; i++) {   //遍历arr 每一项
+      if(newarr.indexOf(arr[i]) == -1) {  //判断newarr数组是否存在arr项 
+          newar.push(arr[i])  //newarr里面不存在就push
+      }
+  }
+console.log(newarr)  //["f", "0", "3", "d", "2"]
+</pre>	
+<pre class="syntax brush-javascript highlight">
+var arr = ['f', '0', '3', 'f', 'd', '2', 'd', 'd']
+   function unique(arr) {
+       var newarr = [arr[0]] //这里构建一个newarr数组 且存放了第一个值 以便下面对比
+       for (var i= 1; i< arr.length; i++) {  
+          var isrepeat = false
+          for (var j= 0; j< newarr.length; j++) {  //循环两个数组做对比
+              if(arr[i] == newarr[j]) {
+                  isrepeat = true 
+                  break      //这里判断下循环arr时候 跟newarr对比 相等就跳出 且给出标记 当前arr数组第几个是出现重复的
+              }
+          }
+          if (!isrepeat) {
+              newarr.push(arr[i])  //这里 true标记的都是重复的  false都是可以添加的
+          }
+       }
+       return newarr //完事返回
+   }
+console.log(unique(arr))    //["f", "0", "3", "d", "2"]		
+</pre>
+<pre class="syntax brush-javascript highlight">
+var arr1 = ['f', '0', '3', 'f', 'd', '2', 'd', 'd']
+  console.log(arr1.sort()) //["0", "2", "3", "d", "d", "d", "f", "f"] 
+  function unique(arr1) {
+    var arr = arr1.sort()  
+    var newarr = [arr[0]] //还是要构建一个newarr数组 存放原数组第一个元素
+    for(var i= 1; i< arr.length; i++) {
+        if (arr[i] !== newarr[newarr.length-1]) { 
+            newarr.push(arr[i])
+        }
+    }
+    return newarr
+  }
+  console.log(unique(arr1)) //["0", "2", "3", "d", "f"]
+</pre>
+			<p>对象属性去重,这样对象属性做法 将数组arr 元素跟obj对象对比 看看对象里面这个属性 不存在就添加到newarr 并将当前数组的这个属性设置一个值表示对象中有了这个值,这样循环完就将 对象中有的属性抛去 剩下去重后的元素</p>
+<pre class="syntax brush-javascript highlight">
+var arr = ['f', '0', '3', 'f', 'd', '2', 'd', 'd']
+  function unique(arr) {
+      var newarr = [] //构建newarr 数组
+      var obj = {}  //构建一个对象obj
+      for (var i= 0; i< arr.length; i++) {
+          if (!obj[arr[i]]) { //如果元素跟数组对比
+              newarr.push(arr[i])
+              obj[arr[i]] = 1 // 元素内容作为对象属性
+          }z
+      }
+      return newarr 
+  }
+  console.log(unique(arr)) //["f", "0", "3", "d", "2"]
+</pre>
+		</div>
+		<div>
+			<h3>JS获取网页高度和宽度</h3>
+			<pre class="syntax brush-javascript highlight">
+网页可见区域宽： document.body.clientWidth 
+网页可见区域高： document.body.clientHeight 
+网页可见区域宽： document.body.offsetWidth (包括边线的宽) 
+网页可见区域高： document.body.offsetHeight (包括边线的高) 
+网页正文全文宽： document.body.scrollWidth 
+网页正文全文高： document.body.scrollHeight 
+网页被卷去的高： document.body.scrollTop 
+网页被卷去的左： document.body.scrollLeft 
+网页正文部分上： window.screenTop 
+网页正文部分左： window.screenLeft 
+屏幕分辨率的高： window.screen.height 
+屏幕分辨率的宽： window.screen.width 
+屏幕可用工作区高度： window.screen.availHeight 
+屏幕可用工作区宽度： window.screen.availWidth
+			</pre>
+		</div>
+		<div>
+			<h3>cookie 使用</h3>
+			<p>注：每个 Cookie 的大小一般不能超过4KB<br>浏览器的同源政策规定，两个网址只要域名相同和端口相同，就可以共享Cookie。<br>
+			注意，这里不要求协议相同。也就是说，http://example.com设置的Cookie，可以被https://example.com读取。<br>
+				详细参考：<a href="http://javascript.ruanyifeng.com/bom/cookie.html">http://javascript.ruanyifeng.com/bom/cookie.html</a>
+			</p>
+<pre class="syntax brush-javascript highlight">
+var cooKie = {
+    set: function(e, t, n, r, i) {
+        typeof n == "undefined" && (n = new Date((new Date).getTime() + 36e5)),
+        document.cookie = e + "=" + escape(t) + (n ? "; expires=" + n.toGMTString() : "") + (r ? "; path=" + r : "; path=/") + (i ? ";domain=" + i : "")
+    },
+    get: function(e) {
+        var t = document.cookie.match(new RegExp("(^| )" + e + "=([^;]*)(;|$)"));
+        return t != null ? unescape(t[2]) : null
+    },
+    clear: function(e, t, n) {
+        this.get(e) && (document.cookie = e + "=" + (t ? "; path=" + t : "; path=/") + (n ? "; domain=" + n : "") + ";expires=Fri, 02-Jan-1970 00:00:00 GMT")
+    }
+};
+</pre>			
+		</div>	
+		<div>
+			<h3>获取浏览器类型和版本</h3>
+<pre class="syntax brush-javascript">
+function getExplore() {
+    var sys = {},
+        ua = navigator.userAgent.toLowerCase(),
+        s;
+    (s = ua.match(/rv:([\d.]+)\) like gecko/)) ? sys.ie = s[1]:
+        (s = ua.match(/msie ([\d\.]+)/)) ? sys.ie = s[1] :
+        (s = ua.match(/edge\/([\d\.]+)/)) ? sys.edge = s[1] :
+        (s = ua.match(/firefox\/([\d\.]+)/)) ? sys.firefox = s[1] :
+        (s = ua.match(/(?:opera|opr).([\d\.]+)/)) ? sys.opera = s[1] :
+        (s = ua.match(/chrome\/([\d\.]+)/)) ? sys.chrome = s[1] :
+        (s = ua.match(/version\/([\d\.]+).*safari/)) ? sys.safari = s[1] : 0;
+    // 根据关系进行判断
+    if (sys.ie) return ('IE: ' + sys.ie)
+    if (sys.edge) return ('EDGE: ' + sys.edge)
+    if (sys.firefox) return ('Firefox: ' + sys.firefox)
+    if (sys.chrome) return ('Chrome: ' + sys.chrome)
+    if (sys.opera) return ('Opera: ' + sys.opera)
+    if (sys.safari) return ('Safari: ' + sys.safari)
+    return 'Unkonwn'
+}
+</pre>
+		</div>
+    <div>
+      <h3>PC端判断</h3>
+<pre class="syntax brush-javascript">
+var system ={ win : false, mac : false, xll : false };
+var p = navigator.platform;
+system.win = p.indexOf("Win") == 0; 
+system.mac = p.indexOf("Mac") == 0; 
+system.x11 = (p == "X11") || (p.indexOf("Linux") == 0);
+if(system.win||system.mac||system.xll){ 
+  //这不是PC端
+}
+</pre>
+    </div>
+    <div>
+      <h3>获取操作系统类型</h3>
+<pre class="syntax brush-javascript">
+function getOS() {
+    var userAgent = 'navigator' in window && 'userAgent' in navigator && navigator.userAgent.toLowerCase() || '';
+    var vendor = 'navigator' in window && 'vendor' in navigator && navigator.vendor.toLowerCase() || '';
+    var appVersion = 'navigator' in window && 'appVersion' in navigator && navigator.appVersion.toLowerCase() || '';
+
+    if (/mac/i.test(appVersion)) return 'MacOSX'
+    if (/win/i.test(appVersion)) return 'windows'
+    if (/linux/i.test(appVersion)) return 'linux'
+    if (/iphone/i.test(userAgent) || /ipad/i.test(userAgent) || /ipod/i.test(userAgent)) 'ios'
+    if (/android/i.test(userAgent)) return 'android'
+    if (/win/i.test(appVersion) && /phone/i.test(userAgent)) return 'windowsPhone'
+}
+</pre>
+    </div>
+    <div>
+      <h3>根据keycode获得键名</h3>
+<pre class="syntax brush-javascript">
+var keyCodeMap = {
+    8: 'Backspace',
+    9: 'Tab',
+    13: 'Enter',
+    16: 'Shift',
+    17: 'Ctrl',
+    18: 'Alt',
+    19: 'Pause',
+    20: 'Caps Lock',
+    27: 'Escape',
+    32: 'Space',
+    33: 'Page Up',
+    34: 'Page Down',
+    35: 'End',
+    36: 'Home',
+    37: 'Left',
+    38: 'Up',
+    39: 'Right',
+    40: 'Down',
+    42: 'Print Screen',
+    45: 'Insert',
+    46: 'Delete',
+
+    48: '0',
+    49: '1',
+    50: '2',
+    51: '3',
+    52: '4',
+    53: '5',
+    54: '6',
+    55: '7',
+    56: '8',
+    57: '9',
+
+    65: 'A',
+    66: 'B',
+    67: 'C',
+    68: 'D',
+    69: 'E',
+    70: 'F',
+    71: 'G',
+    72: 'H',
+    73: 'I',
+    74: 'J',
+    75: 'K',
+    76: 'L',
+    77: 'M',
+    78: 'N',
+    79: 'O',
+    80: 'P',
+    81: 'Q',
+    82: 'R',
+    83: 'S',
+    84: 'T',
+    85: 'U',
+    86: 'V',
+    87: 'W',
+    88: 'X',
+    89: 'Y',
+    90: 'Z',
+
+    91: 'Windows',
+    93: 'Right Click',
+
+    96: 'Numpad 0',
+    97: 'Numpad 1',
+    98: 'Numpad 2',
+    99: 'Numpad 3',
+    100: 'Numpad 4',
+    101: 'Numpad 5',
+    102: 'Numpad 6',
+    103: 'Numpad 7',
+    104: 'Numpad 8',
+    105: 'Numpad 9',
+    106: 'Numpad *',
+    107: 'Numpad +',
+    109: 'Numpad -',
+    110: 'Numpad .',
+    111: 'Numpad /',
+
+    112: 'F1',
+    113: 'F2',
+    114: 'F3',
+    115: 'F4',
+    116: 'F5',
+    117: 'F6',
+    118: 'F7',
+    119: 'F8',
+    120: 'F9',
+    121: 'F10',
+    122: 'F11',
+    123: 'F12',
+
+    144: 'Num Lock',
+    145: 'Scroll Lock',
+    182: 'My Computer',
+    183: 'My Calculator',
+    186: ';',
+    187: '=',
+    188: ',',
+    189: '-',
+    190: '.',
+    191: '/',
+    192: '`',
+    219: '[',
+    220: '\\',
+    221: ']',
+    222: '\''
+};
+/**
+ * @desc 根据keycode获得键名
+ * @param  {Number} keycode 
+ * @return {String}
+ */
+function getKeyName(keycode) {
+    if (keyCodeMap[keycode]) {
+        return keyCodeMap[keycode];
+    } else {
+        console.log('Unknow Key(Key Code:' + keycode + ')');
+        return '';
+    }
+};
+</pre>
+    </div>
+    <div>
+      <h3>获取滚动条距顶部的距离</h3>
+<pre class="syntax brush-javascript">
+function getScrollTop() {
+    return (document.documentElement && document.documentElement.scrollTop) || document.body.scrollTop;
+}
+</pre>
+    </div>
+    <div>
+      <h3>在${duration}时间内，滚动条平滑滚动到${to}指定位置</h3>
+<pre class="syntax brush-javascript">
+var getScrollTop = require('./getScrollTop');
+var setScrollTop = require('./setScrollTop');
+var requestAnimFrame = (function () {
+    return window.requestAnimationFrame ||
+        window.webkitRequestAnimationFrame ||
+        window.mozRequestAnimationFrame ||
+        function (callback) {
+            window.setTimeout(callback, 1000 / 60);
+        };
+})();
+/**
+ * 
+ * @desc  在${duration}时间内，滚动条平滑滚动到${to}指定位置
+ * @param {Number} to 
+ * @param {Number} duration 
+ */
+function scrollTo(to, duration) {
+    if (duration < 0) {
+        setScrollTop(to);
+        return
+    }
+    var diff = to - getScrollTop();
+    if (diff === 0) return
+    var step = diff / duration * 10;
+    requestAnimationFrame(
+        function () {
+            if (Math.abs(step) > Math.abs(diff)) {
+                setScrollTop(getScrollTop() + diff);
+                return;
+            }
+            setScrollTop(getScrollTop() + step);
+            if (diff > 0 && getScrollTop() >= to || diff < 0 && getScrollTop() <= to) {
+                return;
+            }
+            scrollTo(to, duration - 16);
+        });
+}
+</pre>
+    </div>
+    <div>
+      <h3>随机生成颜色</h3>
+<pre class="syntax brush-javascript">
+/**
+ * 
+ * @desc 随机生成颜色
+ * @return {String} 
+ */
+function randomColor() {
+    return '#' + ('00000' + (Math.random() * 0x1000000 << 0).toString(16)).slice(-6);
+}
+</pre>
+    </div>
+    <div>
+      <h3>判断是否为邮箱地址</h3>
+<pre class="syntax brush-javascript">
+/**
+ * 
+ * @desc   判断是否为邮箱地址
+ * @param  {String}  str
+ * @return {Boolean} 
+ */
+function isEmail(str) {
+    return /\w+([-+.]\w+)*@\w+([-.]\w+)*\.\w+([-.]\w+)*/.test(str);
+}
+</pre>
+    </div>
+    <div>
+      <h3>判断是否为身份证号</h3>
+<pre class="syntax brush-javascript">
+/**
+ * 
+ * @desc  判断是否为身份证号
+ * @param  {String|Number} str 
+ * @return {Boolean}
+ */
+function isIdCard(str) {
+    return /^(^[1-9]\d{7}((0\d)|(1[0-2]))(([0|1|2]\d)|3[0-1])\d{3}$)|(^[1-9]\d{5}[1-9]\d{3}((0\d)|(1[0-2]))(([0|1|2]\d)|3[0-1])((\d{4})|\d{3}[Xx])$)$/.test(str)
+}
+</pre>
+    </div>
+    <div>
+      <h3>判断是否为手机号</h3>
+<pre class="syntax brush-javascript">
+/**
+ * 
+ * @desc   判断是否为手机号
+ * @param  {String|Number} str 
+ * @return {Boolean} 
+ */
+function isPhoneNum(str) {
+    return /^(0|86|17951)?(13[0-9]|15[012356789]|17[678]|18[0-9]|14[57])[0-9]{8}$/.test(str)
+}
+</pre>
+    </div>
+    <div>
+      <h3>判断是否为URL地址</h3>
+<pre class="syntax brush-javascript">
+/**
+ * 
+ * @desc   判断是否为URL地址
+ * @param  {String} str 
+ * @return {Boolean}
+ */
+function isUrl(str) {
+    return /[-a-zA-Z0-9@:%._\+~#=]{2,256}\.[a-z]{2,6}\b([-a-zA-Z0-9@:%_\+.~#?&//=]*)/i.test(str);
+}
+</pre>
+    </div>
+    <div>
+      <h3>判断浏览器是否支持webP格式图片</h3>
+<pre class="syntax brush-javascript">
+/**
+ * 
+ * @desc 判断浏览器是否支持webP格式图片
+ * @return {Boolean} 
+ */
+function isSupportWebP() {
+    return !![].map && document.createElement('canvas').toDataURL('image/webp').indexOf('data:image/webp') == 0;
+}
+</pre>
+    </div>
+    <div>
+      <h3>现金额转大写</h3>
+<pre class="syntax brush-javascript">
+/**
+ * 
+ * @desc   现金额转大写
+ * @param  {Number} n 
+ * @return {String}
+ */
+function digitUppercase(n) {
+    var fraction = ['角', '分'];
+    var digit = [
+        '零', '壹', '贰', '叁', '肆',
+        '伍', '陆', '柒', '捌', '玖'
+    ];
+    var unit = [
+        ['元', '万', '亿'],
+        ['', '拾', '佰', '仟']
+    ];
+    var head = n < 0 ? '欠' : '';
+    n = Math.abs(n);
+    var s = '';
+    for (var i = 0; i < fraction.length; i++) {
+        s += (digit[Math.floor(n * 10 * Math.pow(10, i)) % 10] + fraction[i]).replace(/零./, '');
+    }
+    s = s || '整';
+    n = Math.floor(n);
+    for (var i = 0; i < unit[0].length && n > 0; i++) {
+        var p = '';
+        for (var j = 0; j < unit[1].length && n > 0; j++) {
+            p = digit[n % 10] + unit[1][j] + p;
+            n = Math.floor(n / 10);
+        }
+        s = p.replace(/(零.)*零$/, '').replace(/^$/, '零') + unit[0][i] + s;
+    }
+    return head + s.replace(/(零.)*零元/, '元')
+        .replace(/(零.)+/g, '零')
+        .replace(/^整$/, '零元整');
+};
+</pre>
+    </div>
+    <div>
+      <h3>生成指定范围随机数</h3>
+<pre class="syntax brush-javascript">
+/**
+ * 
+ * @desc 生成指定范围随机数
+ * @param  {Number} min 
+ * @param  {Number} max 
+ * @return {Number} 
+ */
+function randomNum(min, max) {
+    return Math.floor(min + Math.random() * (max - min));
+}
+</pre>
+    </div>
+    <div>
+      <h3>格式化${startTime}距现在的已过时间</h3>
+<pre class="syntax brush-javascript">
+/**
+ * @desc   格式化${startTime}距现在的已过时间
+ * @param  {Date} startTime 
+ * @return {String}
+ */
+function formatPassTime(startTime) {
+    var currentTime = Date.parse(new Date()),
+        time = currentTime - startTime,
+        day = parseInt(time / (1000 * 60 * 60 * 24)),
+        hour = parseInt(time / (1000 * 60 * 60)),
+        min = parseInt(time / (1000 * 60)),
+        month = parseInt(day / 30),
+        year = parseInt(month / 12);
+    if (year) return year + "年前"
+    if (month) return month + "个月前"
+    if (day) return day + "天前"
+    if (hour) return hour + "小时前"
+    if (min) return min + "分钟前"
+    else return '刚刚'
+}
+</pre>
+    </div>
+    <div>
+      <h3>格式化现在距${endTime}的剩余时间</h3>
+<pre class="syntax brush-javascript">
+/**
+ * 
+ * @desc   格式化现在距${endTime}的剩余时间
+ * @param  {Date} endTime  
+ * @return {String}
+ */
+function formatRemainTime(endTime) {
+    var startDate = new Date(); //开始时间
+    var endDate = new Date(endTime); //结束时间
+    var t = endDate.getTime() - startDate.getTime(); //时间差
+    var d = 0,
+        h = 0,
+        m = 0,
+        s = 0;
+    if (t >= 0) {
+        d = Math.floor(t / 1000 / 3600 / 24);
+        h = Math.floor(t / 1000 / 60 / 60 % 24);
+        m = Math.floor(t / 1000 / 60 % 60);
+        s = Math.floor(t / 1000 % 60);
+    }
+    return d + "天 " + h + "小时 " + m + "分钟 " + s + "秒";
+}
+</pre>
+    </div>
+    <div>
+      <h3>url参数转对象</h3>
+<pre class="syntax brush-javascript">
+/**
+ * 
+ * @desc   url参数转对象
+ * @param  {String} url  default: window.location.href
+ * @return {Object} 
+ */
+function parseQueryString(url) {
+    url = url == null ? window.location.href : url
+    var search = url.substring(url.lastIndexOf('?') + 1)
+    if (!search) {
+        return {}
+    }
+    return JSON.parse('{"' + decodeURIComponent(search).replace(/"/g, '\\"').replace(/&/g, '","').replace(/=/g, '":"') + '"}')
+}
+</pre>
+    </div>
+    <div>
+      <h3>对象序列化</h3>
+<pre class="syntax brush-javascript">
+/**
+ * 
+ * @desc   对象序列化
+ * @param  {Object} obj 
+ * @return {String}
+ */
+function stringfyQueryString(obj) {
+    if (!obj) return '';
+    var pairs = [];
+
+    for (var key in obj) {
+        var value = obj[key];
+
+        if (value instanceof Array) {
+            for (var i = 0; i < value.length; ++i) {
+                pairs.push(encodeURIComponent(key + '[' + i + ']') + '=' + encodeURIComponent(value[i]));
+            }
+            continue;
+        }
+
+        pairs.push(encodeURIComponent(key) + '=' + encodeURIComponent(obj[key]));
+    }
+
+    return pairs.join('&');
+}
+</pre>
+    </div>
+		<div>
+			<h3>懒加载图片</h3>
+			<pre class="syntax brush-javascript">
+var imgs = document.body.querySelectorAll('img'),    //获取所有图片  
+    H = window.innerHeight;     //浏览器高度
+window.onload = window.onscroll = function(){  
+    var S = document.documentElement.scrollTop||document.body.scrollTop;   //滚动条滚过高度
+    [].forEach.call(imgs,function(img){
+         if(!img.getAttribute('data-src')){return}
+         if(H + S + 200 > getTop(img)){
+// getTop(img)获取图片距离页面顶部高度，H+S+200让图片提前加载。
+             img.src=img.getAttribute("data-src");
+             img.removeAttribute("data-src");
+         }
+        })
+}
+function getTop(e){     //获取元素距离顶部高度方法。  
+    var T = e.offsetTop;
+    while(e = e.offsetParent ){
+        T += e.offsetTop
+}
+    return T
+}			
+</pre>
+			<p>图片 src 为空即可，在'data-src'中添加占位图片</p>
+<pre class="syntax html xml">
+&lt;img src=""  data-src="logo.v3.jpg" &gt;		
+</pre>
+		</div>
+		<div>
+			<h3>浏览器加载图片</h3>
+			<pre class="syntax brush-javascript">
+function ImgLoader(property){
+	var onloadedcompleted	,    
+		onloading			,    
+		NUM_ELEMENTS		,    
+		NUM_LOADED = 0		,    
+		NUM_ERROR = 0		,    
+		TempProperty = {}	,    
+		LOADED_THEMES={}	,    
+		loadList = [] 		     
+
+	if(typeof(property) == 'string'){
+		NUM_ELEMENTS=1;
+		loadList[0]=property;
+	}else{
+		NUM_ELEMENTS=property.length;
+		loadList=property;
+	}
+	this.assets=TempProperty;
+	this.asset=LOADED_THEMES;
+	this.completed=function(callback){
+		onloadedcompleted=callback;
+	};
+	this.progress=function(callback){
+		onloading=callback;
+	};
+	this.start=function(){
+		for(var i=0;i< NUM_ELEMENTS;i++){
+			load(loadList[i],imageLoaded,imageLoadError);
+		}
+		return TempProperty;
+	};
+	function load(img,loaded,error){
+		var image=new Image();
+		image.onload=loaded;
+		image.onerror=error;
+		image.src=img;
+		TempProperty[img]=image;
+	};
+	function imageLoaded(){
+		var imgsrc=this.getAttribute("src");
+		TempProperty[imgsrc].loaded=true;
+		NUM_LOADED++;
+		
+		if(NUM_LOADED+NUM_ERROR==NUM_ELEMENTS){
+			typeof(onloadedcompleted) =='function' && onloadedcompleted(NUM_ELEMENTS,NUM_LOADED,NUM_ERROR);
+		}else{
+			typeof(onloading) =='function' && onloading(NUM_ELEMENTS,NUM_LOADED,NUM_ERROR);
+		}
+	};
+	function imageLoadError(){
+		var imgsrc=this.getAttribute("src");
+		TempProperty[imgsrc].loaded=false;
+		NUM_ERROR++;
+		if(NUM_LOADED+NUM_ERROR==NUM_ELEMENTS){
+			typeof(onloadedcompleted) =='function' && onloadedcompleted(NUM_ELEMENTS,NUM_LOADED,NUM_ERROR);
+		}else{
+			typeof(onloading) =='function' && onloading(NUM_ELEMENTS,NUM_LOADED,NUM_ERROR);
+		}
+	};
+};
+	</pre>
+	<p>
+		调用如下:
+	</p>
+	<pre class="syntax brush-javascript">
+	var imgArray=[
+		'images/custody/bank.png',
+		'images/custody/four_bg.png',
+		'images/custody/icon1.png',
+		'images/custody/icon2.png',
+		'images/custody/icon3.png',
+		'images/custody/kefu.png',
+		'images/custody/kefu_bg.png',
+		'images/custody/money.png',
+		'images/custody/phone.png',
+		'images/custody/phone_bg.png',
+		'images/custody/title-top.png',
+		'images/custody/title1.png',
+		'images/custody/title2.png',
+		'images/custody/two_compliance_1.png',
+		'images/custody/two_compliance_bg.png',
+		'images/custody/two_real_bg.png',
+		'images/custody/two_safe_bg.png',
+	];
+	var imgLoader=new ImgLoader(imgArray); 
+	imgLoader.progress(function(a,b,c){
+	    var per=Math.floor((100*(b+c)/a))+"%";
+		$('#loading').text(per);
+	});
+	imgLoader.completed(function(a,b,c){
+		$('#loading').text('100%').fadeOut(300);
+		setTimeout(function(){
+			$('#con').css('display','block');
+		}, 300);
+		
+	});
+	imgLoader.start();
+	</pre>
+		</div>
+    </div>
+    <script src="js/jquery-1.8.3.min.js"></script>
+    <script src="js/jquery.syntax.js"></script>
+    <script src="js/jquery.syntax.cache.js"></script>
+	<script>
+		$(function(){
+			jQuery.syntax({theme: 'paper', blockLayout: 'fixed'});
+		})
+	</script>
+</body>
+</html>
