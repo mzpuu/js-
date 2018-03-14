@@ -1074,6 +1074,39 @@ function ImgLoader(property){
 	imgLoader.start();
 	</pre>
 		</div>
+    <div>
+      <h3>for和map简单对比</h3>
+<pre class="syntax brush-javascript">
+/******for******/
+var results=[];
+  var anlist = $('.swiper-slide').length;
+  for(var i=0;i< anlist ;i++){
+    var ss = $('.swiper-slide').eq(i);
+    var title = ss.find('.questions').text();
+    var answer = ss.find('.checked').find('input').val();
+    var score = ss.find('.checked').find('input').attr('data-score')*1;
+    results[i]={
+      'title':title,
+      'answer':answer,
+      'score':score,
+    }
+  }
+  /******map******/
+  var ss = [].slice.call(document.querySelectorAll('.swiper-slide'), 0); 
+  var arr= ss.map(function(item){
+   var title = item.getElementsByClassName('questions')[0].innerText;
+   var labels = item.getElementsByClassName('checked');
+   var inputs = labels[0].getElementsByTagName('input');
+   var score = inputs[0].getAttribute('data-score')*1;
+   return item ={
+     'title':title,
+     'answer':inputs[0].value,
+     'score':score,
+   };
+  });
+  console.log(arr)
+</pre>
+    </div>
     </div>
     <script src="js/jquery-1.8.3.min.js"></script>
     <script src="js/jquery.syntax.js"></script>
